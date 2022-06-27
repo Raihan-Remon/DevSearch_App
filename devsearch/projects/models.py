@@ -6,7 +6,7 @@ from users.models import Profile
 
 class Project(models.Model):
     owner = models.ForeignKey(
-        Profile, on_delete=models.SET_NULL, null=True, blank=True)
+        Profile, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     featured_image = models.ImageField(
@@ -25,6 +25,14 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-votes_ratio', '-votes_total', 'title']
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.featured_image.url
+        except:
+            url = ''
+        return url
 
     @property
     def reviewers(self):
